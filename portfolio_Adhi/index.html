@@ -239,10 +239,31 @@
         .nav-links a {
             color: var(--text-muted);
             font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: var(--transition);
         }
 
-        .nav-links a:hover {
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: var(--transition);
+            border-radius: var(--radius-pill);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a.active {
             color: var(--primary);
+            font-weight: 600;
         }
 
         .mobile-menu-btn {
@@ -525,25 +546,65 @@
             font-size: 1.05rem;
         }
 
-        /* --- Skills Section --- */
+        /* --- Skills Section Normal Grid --- */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            width: 100%;
         }
 
         .skill-category-card {
             background-color: var(--bg-card);
             border-radius: var(--radius-lg);
-            padding: 2rem;
+            padding: 2.25rem;
             box-shadow: var(--shadow-sm);
             border: 1px solid var(--border-color);
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            height: 100%; /* Stretch cards in a row to match height */
+            box-sizing: border-box;
+        }
+
+        /* Distinct top gradient borders for card aesthetics */
+        .skill-category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            opacity: 0.85;
+            transition: var(--transition);
+        }
+
+        .skill-category-card.programming::before {
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+        }
+        .skill-category-card.web-tech::before {
+            background: linear-gradient(90deg, #06b6d4, #0ea5e9);
+        }
+        .skill-category-card.tools-testing::before {
+            background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+        }
+        .skill-category-card.design::before {
+            background: linear-gradient(90deg, #f59e0b, #f97316);
+        }
+        .skill-category-card.soft-skills::before {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+        .skill-category-card.dev-tools::before {
+            background: linear-gradient(90deg, #6366f1, #4f46e5);
         }
 
         .skill-category-card:hover {
-            box-shadow: var(--shadow-md);
-            border-color: #cbd5e1;
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(37, 99, 235, 0.25);
         }
 
         .skill-category-card h3 {
@@ -551,38 +612,71 @@
             align-items: center;
             gap: 0.75rem;
             margin-bottom: 1.5rem;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             color: var(--text-main);
+            font-weight: 700;
         }
 
-        .skill-category-card h3 i {
-            color: var(--primary);
-        }
+        .skill-category-card.programming h3 i { color: #2563eb; }
+        .skill-category-card.web-tech h3 i { color: #06b6d4; }
+        .skill-category-card.tools-testing h3 i { color: #8b5cf6; }
+        .skill-category-card.design h3 i { color: #f59e0b; }
+        .skill-category-card.soft-skills h3 i { color: #10b981; }
+        .skill-category-card.dev-tools h3 i { color: #6366f1; }
 
         .skill-list {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.85rem;
+            width: 100%;
         }
 
         .skill-pill {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 1rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.35rem;
+            padding: 0.85rem 1rem;
             background-color: var(--bg-body);
             border-radius: var(--radius-md);
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 0.95rem;
             border: 1px solid var(--border-color);
+            transition: var(--transition);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .skill-pill:hover {
+            background-color: #ffffff;
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
         }
 
         .skill-level {
-            font-size: 0.75rem;
+            font-size: 0.725rem;
             color: var(--primary);
             background-color: var(--secondary-bg);
-            padding: 0.25rem 0.75rem;
+            padding: 0.25rem 0.65rem;
             border-radius: var(--radius-pill);
-            font-weight: 600;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            width: fit-content;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        /* Media Queries for Grid Responsiveness */
+        @media (max-width: 992px) {
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* --- Experience Section --- */
@@ -663,54 +757,198 @@
             line-height: 1.5;
         }
 
-        /* --- Projects Section --- */
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background-color: var(--bg-card);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            padding: 2rem;
-            transition: var(--transition);
+        /* --- Interactive Project Tabs --- */
+        .projects-tabs-container {
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            position: relative;
+            gap: 2.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
-        .project-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-            border-color: #cbd5e1;
+        .projects-tab-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
         }
 
-        .project-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            opacity: 0.9;
-        }
-
-        .project-card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .project-card p {
-            flex-grow: 1;
-            margin-bottom: 1.5rem;
+        .tab-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-pill);
+            font-family: var(--font-family);
             font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tab-btn i {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn:hover i {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+        }
+
+        .tab-btn.active i {
+            color: #ffffff;
+        }
+
+        .projects-showcase {
+            position: relative;
+            min-height: 400px;
+        }
+
+        .project-panel {
+            display: none;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .project-panel.active {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 3rem;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive inside showcase panels */
+        @media (max-width: 992px) {
+            .project-panel.active {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        /* Mockup Browser Window styling */
+        .project-mockup-window {
+            background: #1e293b;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            height: 320px;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .project-mockup-window:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgb(0 0 0 / 0.25);
+        }
+
+        .mockup-header {
+            background: #0f172a;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .mockup-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .mockup-address {
+            background: #1e293b;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            padding: 2px 15px;
+            border-radius: var(--radius-pill);
+            width: 60%;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-family: monospace;
+        }
+
+        @media (max-width: 576px) {
+            .mockup-address {
+                display: none;
+            }
+        }
+
+        .project-mockup-window img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background-color: #0f172a;
+            transition: transform 0.5s ease;
+        }
+
+        .project-mockup-window:hover img {
+            transform: scale(1.03);
+        }
+
+        /* Showcase Details styling */
+        .project-showcase-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .project-showcase-details .featured-badge {
+            position: static;
+            width: fit-content;
+            margin-bottom: 1rem;
+            box-shadow: none;
+        }
+
+        .project-showcase-details h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .project-showcase-details h3 i {
+            color: var(--primary);
+        }
+
+        .project-showcase-details p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
         }
 
         .project-tech {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
         .tech-tag {
@@ -718,73 +956,20 @@
             font-weight: 600;
             color: var(--text-muted);
             background-color: var(--bg-body);
-            padding: 0.25rem 0.6rem;
+            padding: 0.3rem 0.75rem;
             border-radius: var(--radius-md);
             border: 1px solid var(--border-color);
         }
 
-        .project-link {
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+        .showcase-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .showcase-actions .btn {
+            padding: 0.75rem 1.5rem;
             font-size: 0.95rem;
-        }
-        
-        .project-link i {
-            font-size: 0.85rem;
-            transition: transform 0.2s ease;
-        }
-
-        .project-card:hover .project-link i {
-            transform: translateX(4px);
-        }
-
-        /* Featured Projects Styling */
-        .project-card.featured {
-            border: 2px solid var(--primary);
-            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2);
-        }
-
-        .project-img-container {
-            margin: -2rem -2rem 1.5rem -2rem;
-            height: 180px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .project-img-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .project-card:hover .project-img-container img {
-            transform: scale(1.08);
-        }
-
-        .featured-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--primary);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--radius-pill);
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            z-index: 2;
-            box-shadow: var(--shadow-md);
-        }
-
-        .project-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.4));
-            z-index: 1;
         }
 
         /* --- Contact Section --- */
@@ -957,10 +1142,18 @@
                 padding: 1rem 2rem;
                 display: block;
                 border-bottom: 1px solid var(--border-color);
+                border-left: 4px solid transparent;
+                transition: var(--transition);
             }
             
             .nav-links a:last-child {
                 border-bottom: none;
+            }
+
+            .nav-links a.active {
+                background-color: var(--secondary-bg);
+                color: var(--primary);
+                border-left-color: var(--primary);
             }
 
             .mobile-menu-btn {
@@ -1385,7 +1578,7 @@
         <section class="stats-strip">
             <div class="container stats-container">
                 <div class="stat">
-                    <span class="stat-number">2</span>
+                    <span class="stat-number">3</span>
                     <span class="stat-label">Live Client Projects</span>
                 </div>
                 <div class="stat">
@@ -1460,7 +1653,7 @@
                 <div class="skills-grid">
                     
                     <!-- Skill Category -->
-                    <div class="skill-category-card">
+                    <div class="skill-category-card programming">
                         <h3><i class="fas fa-terminal"></i> Programming</h3>
                         <div class="skill-list">
                             <div class="skill-pill">
@@ -1475,7 +1668,7 @@
                     </div>
 
                     <!-- Skill Category -->
-                    <div class="skill-category-card">
+                    <div class="skill-category-card web-tech">
                         <h3><i class="fas fa-globe"></i> Web Technologies</h3>
                         <div class="skill-list">
                             <div class="skill-pill">
@@ -1490,7 +1683,7 @@
                     </div>
 
                     <!-- Skill Category -->
-                    <div class="skill-category-card">
+                    <div class="skill-category-card tools-testing">
                         <h3><i class="fas fa-tools"></i> Tools & Testing</h3>
                         <div class="skill-list">
                             <div class="skill-pill">
@@ -1509,7 +1702,7 @@
                     </div>
 
                     <!-- Skill Category -->
-                    <div class="skill-category-card">
+                    <div class="skill-category-card design">
                         <h3><i class="fas fa-object-group"></i> Design</h3>
                         <div class="skill-list">
                             <div class="skill-pill">
@@ -1524,7 +1717,7 @@
                     </div>
 
                     <!-- Skill Category -->
-                    <div class="skill-category-card">
+                    <div class="skill-category-card soft-skills">
                         <h3><i class="fas fa-lightbulb"></i> Soft Skills</h3>
                         <div class="skill-list">
                             <div class="skill-pill">
@@ -1542,6 +1735,25 @@
                         </div>
                     </div>
 
+                    <!-- Skill Category -->
+                    <div class="skill-category-card dev-tools">
+                        <h3><i class="fas fa-code-branch"></i> Developer Tools</h3>
+                        <div class="skill-list">
+                            <div class="skill-pill">
+                                <span>Git & GitHub</span>
+                                <span class="skill-level">Intermediate</span>
+                            </div>
+                            <div class="skill-pill">
+                                <span>VS Code</span>
+                                <span class="skill-level">Intermediate</span>
+                            </div>
+                            <div class="skill-pill">
+                                <span>Chrome DevTools</span>
+                                <span class="skill-level">Intermediate</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -1555,106 +1767,224 @@
                     <div class="divider"></div>
                 </div>
 
-                <div class="project-grid">
+                <div class="projects-tabs-container">
                     
-                    <!-- Featured Project 1: SV Creations -->
-                    <div class="project-card featured">
-                        <div class="featured-badge">Featured</div>
-                        <div class="project-img-container">
-                            <div class="project-overlay"></div>
-                            <img src="/assets/sv_creations.png" alt="SV Creations Mockup">
-                        </div>
-                        <i class="fas fa-camera-retro project-icon"></i>
-                        <h3>SV Creations Studio</h3>
-                        <p>A high-end photography studio website featuring a cinematic editorial design, masonry galleries, and professional booking integration.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">HTML5</span>
-                            <span class="tech-tag">CSS3</span>
-                            <span class="tech-tag">JS</span>
-                            <span class="tech-tag">Tailwind</span>
-                        </div>
-                        <a href="https://svcreations.netlify.app/" target="_blank" rel="noopener noreferrer" class="project-link">Launch Live Site <i class="fas fa-external-link-alt"></i></a>
+                    <!-- Tab Buttons -->
+                    <div class="projects-tab-buttons" role="tablist">
+                        <button class="tab-btn active" role="tab" aria-selected="true" data-tab="sv-creations">
+                            <i class="fas fa-camera-retro"></i> SV Creations
+                        </button>
+                        <button class="tab-btn" role="tab" aria-selected="false" data-tab="jeeva-fencing">
+                            <i class="fas fa-shield-alt"></i> Jeeva Fencing
+                        </button>
+                        <button class="tab-btn" role="tab" aria-selected="false" data-tab="dr-ram">
+                            <i class="fas fa-tooth"></i> Dr. Ram Dental
+                        </button>
+                        <button class="tab-btn" role="tab" aria-selected="false" data-tab="ironform">
+                            <i class="fas fa-dumbbell"></i> IRONFORM Gym
+                        </button>
+                        <button class="tab-btn" role="tab" aria-selected="false" data-tab="bus-bot">
+                            <i class="fas fa-robot"></i> BusBot AI
+                        </button>
+                        <button class="tab-btn" role="tab" aria-selected="false" data-tab="portfolio">
+                            <i class="fas fa-id-badge"></i> Portfolio
+                        </button>
                     </div>
 
-                    <!-- Featured Project 2: Jeeva Fencing -->
-                    <div class="project-card featured">
-                        <div class="featured-badge">Featured</div>
-                        <div class="project-img-container" style="background: #0f172a; display: flex; align-items: center; justify-content: center;">
-                            <div class="project-overlay"></div>
-                            <img src="assets/jeeva_fencing.png" alt="Jeeva Fencing Logo" style="width: auto; height: 80%; object-fit: contain;">
+                    <!-- Project Showcase panels -->
+                    <div class="projects-showcase">
+                        
+                        <!-- Panel: SV Creations -->
+                        <div class="project-panel active" id="sv-creations" role="tabpanel">
+                            <div class="project-mockup-window">
+                                <div class="mockup-header">
+                                    <div class="mockup-dots">
+                                        <div class="dot red"></div>
+                                        <div class="dot yellow"></div>
+                                        <div class="dot green"></div>
+                                    </div>
+                                    <div class="mockup-address">https://svcreations.netlify.app/</div>
+                                    <div style="width: 32px;"></div>
+                                </div>
+                                <img src="/assets/sv_creations.png" alt="SV Creations Mockup">
+                            </div>
+                            <div class="project-showcase-details">
+                                <span class="featured-badge">Featured Client Site</span>
+                                <h3><i class="fas fa-camera-retro"></i> SV Creations Studio</h3>
+                                <p>A high-end photography studio website featuring a cinematic editorial design, masonry galleries, and professional booking integration.</p>
+                                <div class="project-tech">
+                                    <span class="tech-tag">HTML5</span>
+                                    <span class="tech-tag">CSS3</span>
+                                    <span class="tech-tag">JS</span>
+                                    <span class="tech-tag">Tailwind</span>
+                                </div>
+                                <div class="showcase-actions">
+                                    <a href="https://svcreations.netlify.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                                        Launch Live Site <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <i class="fas fa-shield-alt project-icon"></i>
-                        <h3>Jeeva Fencing Solutions</h3>
-                        <p>A comprehensive business website for a fencing and security provider, featuring dynamic product catalogs and specialized service listings.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">HTML5</span>
-                            <span class="tech-tag">CSS3</span>
-                            <span class="tech-tag">JavaScript</span>
-                            <span class="tech-tag">Business UI</span>
-                        </div>
-                        <a href="https://jeevafencing.in/" target="_blank" rel="noopener noreferrer" class="project-link">View Business Site <i class="fas fa-external-link-alt"></i></a>
-                    </div>
-                    
-                    <!-- Project Card -->
-                    <div class="project-card">
-                        <div class="project-img-container">
-                            <div class="project-overlay"></div>
-                            <img src="assets/portfolio.png" alt="Personal Portfolio Mockup">
-                        </div>
-                        <i class="fas fa-id-badge project-icon"></i>
-                        <h3>Personal Portfolio</h3>
-                        <p>A responsive, single-page portfolio designed clean, modern, and highly structural to showcase my capabilities.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">HTML</span>
-                            <span class="tech-tag">CSS</span>
-                        </div>
-                        <a href="/index.html" class="project-link">You're Viewing It <i class="fas fa-arrow-right"></i></a>
-                    </div>
 
-                    <!-- Project Card -->
-                    <div class="project-card">
-                        <div class="project-img-container">
-                            <div class="project-overlay"></div>
-                            <img src="assets/task_manager.png" alt="Task Manager CLI Illustration">
+                        <!-- Panel: Jeeva Fencing -->
+                        <div class="project-panel" id="jeeva-fencing" role="tabpanel">
+                            <div class="project-mockup-window">
+                                <div class="mockup-header">
+                                    <div class="mockup-dots">
+                                        <div class="dot red"></div>
+                                        <div class="dot yellow"></div>
+                                        <div class="dot green"></div>
+                                    </div>
+                                    <div class="mockup-address">https://jeevafencing.in/</div>
+                                    <div style="width: 32px;"></div>
+                                </div>
+                                <img src="assets/jeeva_fencing.png" alt="Jeeva Fencing Mockup">
+                            </div>
+                            <div class="project-showcase-details">
+                                <span class="featured-badge">Featured Business Site</span>
+                                <h3><i class="fas fa-shield-alt"></i> Jeeva Fencing Solutions</h3>
+                                <p>A comprehensive business website for a fencing and security provider, featuring dynamic product catalogs and specialized service listings.</p>
+                                <div class="project-tech">
+                                    <span class="tech-tag">HTML5</span>
+                                    <span class="tech-tag">CSS3</span>
+                                    <span class="tech-tag">JavaScript</span>
+                                    <span class="tech-tag">Business UI</span>
+                                </div>
+                                <div class="showcase-actions">
+                                    <a href="https://jeevafencing.in/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                                        View Business Site <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <i class="fas fa-tasks project-icon"></i>
-                        <h3>Task Manager CLI</h3>
-                        <p>A command-line interface tool built using Python to allow users to efficiently manage, view, and organize daily tasks.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Python</span>
-                        </div>
-                        <a href="https://github.com/adhithyan-jayaprakash/task-manager-cli" target="_blank" class="project-link">View on GitHub <i class="fas fa-arrow-right"></i></a>
-                    </div>
 
-                    <!-- Project Card -->
-                    <div class="project-card">
-                        <div class="project-img-container">
-                            <div class="project-overlay"></div>
-                            <img src="assets/student_result.png" alt="Student Result System Illustration">
+                        <!-- Panel: Dr. Ram -->
+                        <div class="project-panel" id="dr-ram" role="tabpanel">
+                            <div class="project-mockup-window">
+                                <div class="mockup-header">
+                                    <div class="mockup-dots">
+                                        <div class="dot red"></div>
+                                        <div class="dot yellow"></div>
+                                        <div class="dot green"></div>
+                                    </div>
+                                    <div class="mockup-address">https://ramsdental.netlify.app/</div>
+                                    <div style="width: 32px;"></div>
+                                </div>
+                                <img src="assets/rams_dental.png" alt="Dr. Ram Dental Clinic Mockup">
+                            </div>
+                            <div class="project-showcase-details">
+                                <span class="featured-badge">Client Project</span>
+                                <h3><i class="fas fa-tooth"></i> Dr. Ram Dental Clinic</h3>
+                                <p>A high-end, responsive client website built for a professional dental clinic in Madukkur, featuring dynamic appointment booking, Google Reviews, and custom service modules.</p>
+                                <div class="project-tech">
+                                    <span class="tech-tag">HTML5</span>
+                                    <span class="tech-tag">CSS3</span>
+                                    <span class="tech-tag">JavaScript</span>
+                                    <span class="tech-tag">AOS</span>
+                                </div>
+                                <div class="showcase-actions">
+                                    <a href="https://ramsdental.netlify.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                                        Launch Live Site <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <i class="fas fa-users-cog project-icon"></i>
-                        <h3>Student Result System</h3>
-                        <p>A secure C++ console application leveraging object-oriented principles to capture, calculate, and query student grading records.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">C++</span>
-                        </div>
-                        <a href="https://github.com/adhithyan-jayaprakash/student-result-system" target="_blank" class="project-link">View on GitHub <i class="fas fa-arrow-right"></i></a>
-                    </div>
 
-                    <!-- Project Card -->
-                    <div class="project-card">
-                        <div class="project-img-container">
-                            <div class="project-overlay"></div>
-                            <img src="assets/automated_test.png" alt="Automated Login Test Illustration">
+                        <!-- Panel: IRONFORM Gym -->
+                        <div class="project-panel" id="ironform" role="tabpanel">
+                            <div class="project-mockup-window">
+                                <div class="mockup-header">
+                                    <div class="mockup-dots">
+                                        <div class="dot red"></div>
+                                        <div class="dot yellow"></div>
+                                        <div class="dot green"></div>
+                                    </div>
+                                    <div class="mockup-address">https://ironform-kappa.vercel.app/</div>
+                                    <div style="width: 32px;"></div>
+                                </div>
+                                <img src="assets/ironform.png" alt="IRONFORM Gym Mockup">
+                            </div>
+                            <div class="project-showcase-details">
+                                <span class="featured-badge">Fitness Application</span>
+                                <h3><i class="fas fa-dumbbell"></i> IRONFORM Gym</h3>
+                                <p>A premium dark-mode landing page designed for an elite fitness and bodybuilding gym, featuring interactive program highlights, membership tiers, and dark-mode aesthetic styling.</p>
+                                <div class="project-tech">
+                                    <span class="tech-tag">HTML5</span>
+                                    <span class="tech-tag">Tailwind</span>
+                                    <span class="tech-tag">JavaScript</span>
+                                    <span class="tech-tag">AOS</span>
+                                </div>
+                                <div class="showcase-actions">
+                                    <a href="https://ironform-kappa.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                                        Launch Live Site <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <i class="fas fa-shield-alt project-icon"></i>
-                        <h3>Automated Login Test</h3>
-                        <p>An automated testing suite written with WebDriver to extensively verify the reliability of a website's authentication flow.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">Selenium</span>
-                            <span class="tech-tag">Python</span>
+
+                        <!-- Panel: BusBot AI -->
+                        <div class="project-panel" id="bus-bot" role="tabpanel">
+                            <div class="project-mockup-window">
+                                <div class="mockup-header">
+                                    <div class="mockup-dots">
+                                        <div class="dot red"></div>
+                                        <div class="dot yellow"></div>
+                                        <div class="dot green"></div>
+                                    </div>
+                                    <div class="mockup-address">https://bus-bot-ai.vercel.app/</div>
+                                    <div style="width: 32px;"></div>
+                                </div>
+                                <img src="assets/bus_bot.png" alt="BusBot AI Mockup">
+                            </div>
+                            <div class="project-showcase-details">
+                                <span class="featured-badge">AI Application</span>
+                                <h3><i class="fas fa-robot"></i> BusBot — AI Chatbot</h3>
+                                <p>An innovative AI-powered bus booking chatbot interface featuring a smart natural-language query simulator, interactive seat layouts, live GPS transit tracking, and multilingual support.</p>
+                                <div class="project-tech">
+                                    <span class="tech-tag">HTML5</span>
+                                    <span class="tech-tag">CSS3</span>
+                                    <span class="tech-tag">JavaScript</span>
+                                    <span class="tech-tag">PWA</span>
+                                </div>
+                                <div class="showcase-actions">
+                                    <a href="https://bus-bot-ai.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                                        Launch Live Site <i class="fas fa-external-link-alt"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <a href="https://github.com/adhithyan-jayaprakash/automated-login-test" target="_blank" class="project-link">View on GitHub <i class="fas fa-arrow-right"></i></a>
+
+                        <!-- Panel: Personal Portfolio -->
+                        <div class="project-panel" id="portfolio" role="tabpanel">
+                            <div class="project-mockup-window">
+                                <div class="mockup-header">
+                                    <div class="mockup-dots">
+                                        <div class="dot red"></div>
+                                        <div class="dot yellow"></div>
+                                        <div class="dot green"></div>
+                                    </div>
+                                    <div class="mockup-address">https://adhithyanj.dev/</div>
+                                    <div style="width: 32px;"></div>
+                                </div>
+                                <img src="assets/portfolio.png" alt="Personal Portfolio Mockup">
+                            </div>
+                            <div class="project-showcase-details">
+                                <span class="featured-badge">Current Site</span>
+                                <h3><i class="fas fa-id-badge"></i> Personal Portfolio</h3>
+                                <p>A responsive, single-page portfolio designed clean, modern, and highly structural to showcase my capabilities.</p>
+                                <div class="project-tech">
+                                    <span class="tech-tag">HTML5</span>
+                                    <span class="tech-tag">CSS3</span>
+                                    <span class="tech-tag">JavaScript</span>
+                                </div>
+                                <div class="showcase-actions">
+                                    <a href="/index.html" class="btn btn-outline">
+                                        You're Viewing It <i class="fas fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
@@ -1826,26 +2156,26 @@
                             </section>
 
                             <section class="resume-main-section">
-                                <h3 class="resume-section-title"><i class="fas fa-laptop-code"></i> Key Projects</h3>
-                                <div class="resume-entry">
-                                    <div class="resume-entry-header">
-                                        <span class="resume-entry-title">Automated Testing Framework</span>
-                                        <span class="resume-entry-date">2023</span>
-                                    </div>
-                                    <ul class="resume-entry-list">
-                                        <li>Built a comprehensive automation suite using Selenium WebDriver to validate authentication security.</li>
-                                        <li>Reduced regression testing time by implementing reusable test scripts for core business flows.</li>
-                                    </ul>
-                                </div>
-                                <div class="resume-entry">
-                                    <div class="resume-entry-header">
-                                        <span class="resume-entry-title">Student Record Management</span>
-                                        <span class="resume-entry-date">2022</span>
-                                    </div>
-                                    <ul class="resume-entry-list">
-                                        <li>Developed a data management application in C++ utilizing complex OO design patterns.</li>
-                                    </ul>
-                                </div>
+                                 <h3 class="resume-section-title"><i class="fas fa-laptop-code"></i> Key Projects</h3>
+                                 <div class="resume-entry">
+                                     <div class="resume-entry-header">
+                                         <span class="resume-entry-title">Dr. Ram Dental Clinic Website</span>
+                                         <span class="resume-entry-date">2026</span>
+                                     </div>
+                                     <ul class="resume-entry-list">
+                                         <li>Engineered a custom, high-end frontend client website integrating real-time booking forms and location APIs.</li>
+                                         <li>Optimized visual layout for search engines (SEO) and ensured cross-browser responsive compatibility.</li>
+                                     </ul>
+                                 </div>
+                                 <div class="resume-entry">
+                                     <div class="resume-entry-header">
+                                         <span class="resume-entry-title">BusBot — AI booking Chatbot UI</span>
+                                         <span class="resume-entry-date">2026</span>
+                                     </div>
+                                     <ul class="resume-entry-list">
+                                         <li>Designed an interactive chatbot simulator supporting stateful booking, visual seat maps, and live GPS transit updates.</li>
+                                     </ul>
+                                 </div>
                             </section>
 
                         </div>
@@ -1944,6 +2274,116 @@
                 menuToggle.querySelector('i').classList.remove('fa-times');
                 menuToggle.querySelector('i').classList.add('fa-bars');
             });
+        });
+
+        // Active Navigation Highlight on Scroll
+        const sections = document.querySelectorAll('section[id]');
+        const navAnchorLinks = document.querySelectorAll('.nav-links a');
+
+        function updateActiveNav() {
+            // Check sections at ~1/3rd down the viewport
+            let scrollPosition = window.scrollY + window.innerHeight / 3;
+
+            // Handle bottom of page edge-case (Contact section is usually short and might not hit the top third)
+            if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 60) {
+                navAnchorLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#contact') {
+                        link.classList.add('active');
+                    }
+                });
+                return;
+            }
+
+            let currentSectionId = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                
+                if (window.scrollY >= sectionTop - 100) {
+                    currentSectionId = section.getAttribute('id');
+                }
+            });
+
+            if (currentSectionId) {
+                navAnchorLinks.forEach(link => {
+                    if (link.getAttribute('href') === `#${currentSectionId}`) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            } else {
+                // Default to Home if at the very top
+                navAnchorLinks.forEach((link, idx) => {
+                    if (idx === 0) link.classList.add('active');
+                    else link.classList.remove('active');
+                });
+            }
+        }
+
+        // Performance-throttled scroll listener using requestAnimationFrame
+        let isScrolling = false;
+        window.addEventListener('scroll', () => {
+            if (!isScrolling) {
+                window.requestAnimationFrame(() => {
+                    updateActiveNav();
+                    isScrolling = false;
+                });
+                isScrolling = true;
+            }
+        });
+
+        window.addEventListener('resize', updateActiveNav);
+        
+        // Initial run
+        updateActiveNav();
+
+        // Project Tabs Controller
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const projectPanels = document.querySelectorAll('.project-panel');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTabId = button.getAttribute('data-tab');
+
+                // Update active button state
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+                button.classList.add('active');
+                button.setAttribute('aria-selected', 'true');
+
+                // Transition project panels
+                projectPanels.forEach(panel => {
+                    if (panel.classList.contains('active')) {
+                        // Fade out current panel first
+                        panel.style.opacity = '0';
+                        panel.style.transform = 'translateY(15px)';
+                        
+                        setTimeout(() => {
+                            panel.classList.remove('active');
+                            
+                            // Activating target panel after fade out completes
+                            const newPanel = document.getElementById(targetTabId);
+                            newPanel.classList.add('active');
+                            // Small delay to trigger hardware-accelerated transitions
+                            setTimeout(() => {
+                                newPanel.style.opacity = '1';
+                                newPanel.style.transform = 'translateY(0)';
+                            }, 50);
+                        }, 250);
+                    }
+                });
+            });
+        });
+
+        // Initialize display properties for JS animations
+        projectPanels.forEach(panel => {
+            if (panel.classList.contains('active')) {
+                panel.style.opacity = '1';
+                panel.style.transform = 'translateY(0)';
+            }
         });
 
         // Resume Modal Functions
