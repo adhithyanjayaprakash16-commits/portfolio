@@ -1039,6 +1039,24 @@
             border: 1px solid var(--border-color);
         }
 
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .form-grid .form-group {
+            margin-bottom: 0;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+        }
+
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -1075,8 +1093,48 @@
             resize: vertical;
         }
 
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23475569%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 0.65rem auto;
+            padding-right: 2.5rem;
+        }
+
         .contact-form .btn {
             width: 100%;
+        }
+
+        /* Inline Form Notification Styling */
+        .form-result-message {
+            margin-top: 1.25rem;
+            padding: 0.875rem 1rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: center;
+            border: 1px solid transparent;
+            display: none;
+            transition: var(--transition);
+        }
+        .form-result-message.success {
+            background-color: #dcfce7;
+            color: #15803d;
+            border-color: #bbf7d0;
+            display: block;
+        }
+        .form-result-message.error {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border-color: #fecaca;
+            display: block;
+        }
+        .form-result-message.warning {
+            background-color: #fef9c3;
+            color: #a16207;
+            border-color: #fef08a;
+            display: block;
         }
 
         /* --- Footer --- */
@@ -2108,22 +2166,75 @@
                     </div>
 
                     <!-- Form UI -->
-                    <form class="contact-form" action="https://formspree.io/f/meepgojg" method="POST">
-                        <div class="form-group">
-                            <label for="name">Your Name</label>
-                            <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required>
+                    <form class="contact-form" action="https://api.web3forms.com/submit" method="POST" id="contactForm">
+                        <!-- Web3Forms Configuration -->
+                        <input type="hidden" name="access_key" value="48939a85-b3d3-470f-b2b5-dafe00bbf629">
+                        <input type="hidden" name="subject" value="Adhi-portfolio Contact Submission">
+
+                        <!-- Honeypot spam prevention field -->
+                        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+                        
+                        <!-- Row 1: Name & Email -->
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="name"><i class="fas fa-user" style="margin-right: 5px; color: var(--primary);"></i> Your Name</label>
+                                <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><i class="fas fa-envelope" style="margin-right: 5px; color: var(--primary);"></i> Your Email</label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="name@company.com" required>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="email">Your Email</label>
-                            <input type="email" id="email" name="_replyto" class="form-control" placeholder="Enter your email address" required>
+
+                        <!-- Row 2: Phone & Company -->
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="phone"><i class="fas fa-phone-alt" style="margin-right: 5px; color: var(--primary);"></i> Phone Number <span style="font-weight: normal; opacity: 0.7;">(Optional)</span></label>
+                                <input type="tel" id="phone" name="phone" class="form-control" placeholder="e.g. +91 98765 43210">
+                            </div>
+                            <div class="form-group">
+                                <label for="company"><i class="fas fa-building" style="margin-right: 5px; color: var(--primary);"></i> Company / Organization</label>
+                                <input type="text" id="company" name="company" class="form-control" placeholder="e.g. TechCorp, Personal Project" required>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" class="form-control" placeholder="Write your message here..." required></textarea>
+
+                        <!-- Row 3: Reason & Subject -->
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="inquiry_type"><i class="fas fa-question-circle" style="margin-right: 5px; color: var(--primary);"></i> Reason for Contact</label>
+                                <select id="inquiry_type" name="inquiry_type" class="form-control" required>
+                                    <option value="" disabled selected>Select an option</option>
+                                    <option value="Full-time Opportunity">Hiring (Full-time Position)</option>
+                                    <option value="Internship / Training">Internship / Training Opportunity</option>
+                                    <option value="Freelance / Contract Project">Freelance / Contract Project</option>
+                                    <option value="Collaboration / Networking">Collaboration / Networking</option>
+                                    <option value="General Question / Other">General Question</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject"><i class="fas fa-tag" style="margin-right: 5px; color: var(--primary);"></i> Subject</label>
+                                <input type="text" id="subject" name="_subject" class="form-control" placeholder="e.g. Frontend Internship Opportunity" required>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">
-                            Send Message <i class="fas fa-paper-plane" style="margin-left: 5px;"></i>
+
+                        <!-- Row 4: Message (Full Width) -->
+                        <div class="form-group">
+                            <label for="message"><i class="fas fa-pen" style="margin-right: 5px; color: var(--primary);"></i> Message Details</label>
+                            <textarea id="message" name="message" class="form-control" placeholder="Describe the role details, project scope, or your inquiry here..." required></textarea>
+                        </div>
+
+                        <!-- Centered hCaptcha Spam Prevention -->
+                        <div class="form-group" style="display: flex; justify-content: center; margin-top: 1.5rem; margin-bottom: 1.5rem; width: 100%;">
+                            <div class="h-captcha" data-captcha="true"></div>
+                        </div>
+                        <script src="https://web3forms.com/client/script.js" async defer></script>
+
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            Send Inquiry <i class="fas fa-paper-plane" style="margin-left: 5px;"></i>
                         </button>
+                        
+                        <!-- Dynamic Status Message Container -->
+                        <div id="form-result" class="form-result-message"></div>
                     </form>
 
                 </div>
@@ -2444,6 +2555,89 @@
                 closeResume();
             }
         });
+
+        // Web3Forms AJAX & hCaptcha Verification Controller
+        const cForm = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const formResult = document.getElementById('form-result');
+
+        if (cForm) {
+            cForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Clear previous message states
+                formResult.className = 'form-result-message';
+                formResult.style.display = 'none';
+                formResult.style.opacity = '1';
+
+                // 1. Client-side hCaptcha validation
+                const hCaptchaResponse = cForm.querySelector('textarea[name=h-captcha-response]');
+                if (!hCaptchaResponse || !hCaptchaResponse.value) {
+                    formResult.textContent = 'Please complete the hCaptcha checkbox to verify you are human.';
+                    formResult.classList.add('warning');
+                    return;
+                }
+
+                // 2. Set button loading state
+                const originalBtnContent = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'Sending message... <i class="fas fa-spinner fa-spin" style="margin-left: 5px;"></i>';
+
+                // 3. Prepare form data payload
+                const formData = new FormData(cForm);
+                const payload = Object.fromEntries(formData);
+                const jsonPayload = JSON.stringify(payload);
+
+                // 4. Send AJAX post request
+                fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: jsonPayload
+                })
+                .then(async (response) => {
+                    let result = await response.json();
+                    if (response.status === 200) {
+                        // Success state
+                        formResult.textContent = 'Thank you! Your message has been sent successfully.';
+                        formResult.classList.add('success');
+                        
+                        // Clear the form
+                        cForm.reset();
+                        
+                        // Reset hCaptcha widget
+                        if (typeof hcaptcha !== 'undefined') {
+                            hcaptcha.reset();
+                        }
+                    } else {
+                        // Server rejected (e.g. invalid key or captcha)
+                        formResult.textContent = result.message || 'Verification failed. Please try again.';
+                        formResult.classList.add('error');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Submission error:', error);
+                    formResult.textContent = 'Something went wrong. Please check your network connection.';
+                    formResult.classList.add('error');
+                })
+                .finally(() => {
+                    // Restore button state
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnContent;
+
+                    // Automatically fade out message after 6 seconds
+                    setTimeout(() => {
+                        formResult.style.opacity = '0';
+                        setTimeout(() => {
+                            formResult.style.display = 'none';
+                            formResult.style.opacity = '1';
+                        }, 400);
+                    }, 6000);
+                });
+            });
+        }
     </script>
 </body>
 </html>
